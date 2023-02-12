@@ -16,6 +16,14 @@ const handleDuplicateFieldErrorDB = (err) => {
   return new AppError(`Duplicate ${keyValue[0]}: ${keyValue[1]}. Please use another value.`, 400);
 };
 
+const handleJWTErrorDB = () => {
+  return new AppError('Invalid token. Pleanse login again.', 401);
+};
+
+const handleJWTExpiredErrorDB = () => {
+  return new AppError('Your token has expired. Pleanse login again.', 401);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode || 500).json({
     status: err.status || 'error',
@@ -32,7 +40,7 @@ const sendErrorProd = (err, res) => {
       message: err.message,
     });
   } else {
-    // console.error(err);
+    console.error(err);
 
     res.status(500).json({
       status: 'error',
@@ -59,6 +67,14 @@ module.exports = (err, req, res, next) => {
 
     if (error.code === 11000) {
       error = handleDuplicateFieldErrorDB(error);
+    }
+
+    if (error.name === 'JsonWebTokenError') {
+      error = handleJWTErrorDB();
+    }
+
+    if (error.name === 'TokenExpiredError') {
+      error = handleJWTExpiredErrorDB();
     }
 
     sendErrorProd(error, res);
