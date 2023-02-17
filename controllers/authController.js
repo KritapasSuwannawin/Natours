@@ -15,12 +15,21 @@ const signToken = (id) => {
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
 
+  // Send back cookie
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  };
+
+  res.cookie('jwt', token, cookieOptions);
+
   // Remove password from output
   user.password = undefined;
 
   res.status(statusCode).json({
     status: 'success',
-    token,
+    // token,
     data: {
       user,
     },
@@ -57,9 +66,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check if it's there
   let token;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+  if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
+    token = req.headers.cookie.split('=')[1];
   }
+
+  // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  //   token = req.headers.authorization.split(' ')[1];
+  // }
 
   if (!token) {
     return next(new AppError('You are not logged in! Please log in to get access.', 401));
