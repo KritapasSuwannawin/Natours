@@ -1,21 +1,24 @@
+require('dotenv').config({ path: '../.env' });
 const fs = require('fs');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 
 const Tour = require('../models/tourModel');
-
-dotenv.config();
 
 mongoose
   .connect(process.env.DATABASE_CONNECTION_STRING, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   })
-  .then(() => console.log('DB connection successful'));
+  .then(() => console.log('DB connection successful'))
+  .catch((err) => {
+    console.log(err.message);
+    process.exit();
+  });
 
 // READ JSON FILE
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 // IMPORT DATA INTO DB
 const importData = async () => {
