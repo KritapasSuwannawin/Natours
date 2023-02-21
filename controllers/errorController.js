@@ -27,7 +27,7 @@ const handleJWTExpiredErrorDB = () => {
 const sendErrorDev = (err, req, res) => {
   // A) API
   if (req.originalUrl.startsWith('/api')) {
-    return res.status(err.statusCode).json({
+    return res.status(err.statusCode || 500).json({
       status: err.status,
       error: err,
       message: err.message,
@@ -37,7 +37,7 @@ const sendErrorDev = (err, req, res) => {
 
   // B) RENDERED WEBSITE
   console.error('ERROR 💥', err);
-  return res.status(err.statusCode).render('error', {
+  return res.status(err.statusCode || 500).render('error', {
     title: 'Something went wrong!',
     msg: err.message,
   });
@@ -48,7 +48,7 @@ const sendErrorProd = (err, req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     // A) Operational, trusted error: send message to client
     if (err.isOperational) {
-      return res.status(err.statusCode).json({
+      return res.status(err.statusCode || 500).json({
         status: err.status,
         message: err.message,
       });
@@ -68,7 +68,7 @@ const sendErrorProd = (err, req, res) => {
   // A) Operational, trusted error: send message to client
   if (err.isOperational) {
     console.log(err);
-    return res.status(err.statusCode).render('error', {
+    return res.status(err.statusCode || 500).render('error', {
       title: 'Something went wrong!',
       msg: err.message,
     });
@@ -77,7 +77,7 @@ const sendErrorProd = (err, req, res) => {
   // 1) Log error
   console.error('ERROR 💥', err);
   // 2) Send generic message
-  return res.status(err.statusCode).render('error', {
+  return res.status(err.statusCode || 500).render('error', {
     title: 'Something went wrong!',
     msg: 'Please try again later.',
   });
