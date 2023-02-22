@@ -1,0 +1,61 @@
+password: test1234
+
+email: admin@natours.io
+role: admin
+
+email: steve@example.com
+role: lead-guide
+
+email: aarav@example.com
+role: lead-guide
+
+email: miyah@example.com
+role: lead-guide
+
+email: leo@example.com
+role: guide
+
+email: jennifer@example.com
+role: guide
+
+email: kate@example.com
+role: guide
+
+email: ben@example.com
+role: guide
+
+email: eliana@example.com
+role: user
+
+email: chris@example.com
+role: user
+
+email: loulou@example.com
+role: user
+
+email: sophie@example.com
+role: user
+
+email: ayls@example.com
+role: user
+
+email: laura@example.com
+role: user
+
+email: max@example.com
+role: user
+
+email: isabel@example.com
+role: user
+
+email: alex@example.com
+role: user
+
+email: edu@example.com
+role: user
+
+email: john@example.com
+role: user
+
+email: lisa@example.com
+role: user
