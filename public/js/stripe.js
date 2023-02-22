@@ -5,7 +5,7 @@ import { showAlert } from './alerts';
 export const bookTour = async (tourId) => {
   try {
     // 1) Get checkout session from API
-    const session = await axios(`${location.origin}/api/v1/bookings/checkout-session/${tourId}`);
+    const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`);
 
     // 2) Create checkout form + chanre credit card
     await Stripe(
@@ -14,7 +14,6 @@ export const bookTour = async (tourId) => {
       sessionId: session.data.session.id,
     });
   } catch (err) {
-    console.log(err);
     showAlert('error', err);
   }
 };
